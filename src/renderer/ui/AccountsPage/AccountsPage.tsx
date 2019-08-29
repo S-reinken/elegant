@@ -4,10 +4,10 @@ import { withStyles } from "@material-ui/styles";
 
 const styles = (theme: Theme) => createStyles({
     root: {
-        background: "black",
+        background: theme.palette.primary.dark,
         width: "100vw",
         height: "100vh",
-        color: "red",
+        color: "white",
     }
 })
 
