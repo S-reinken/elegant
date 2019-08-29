@@ -28,7 +28,8 @@
   "dependencies": {
     "@types/react-dom": "^16.9.0",
     "react": "^16.9.0",
-    "react-dom": "^16.9.0"
+    "react-dom": "^16.9.0",
+    "typeface-roboto": "0.0.75"
   },
   "devDependencies": {
     "@material-ui/core": "^4.3.3",
