@@ -5,7 +5,8 @@ import { fontStyle } from "@material-ui/system";
 
 const styles = (theme: Theme) => createStyles({
     root: {
-        "& h1,h2": {
+        "& h1,h4": {
+            display: "flex",
             boxSizing: "border-box",
             margin: "0",
             fontWeight: "normal",
@@ -24,7 +25,7 @@ const styles = (theme: Theme) => createStyles({
     paper: {
         borderRadius: "0",
         display: "flex",
-        flexDirection: "row",
+        flexDirection: "column",
         textAlign: "start",
         justifyContent: "space-between",
         alignItems: "flex-start",
@@ -32,7 +33,10 @@ const styles = (theme: Theme) => createStyles({
         padding: theme.spacing(1),
         color: "white",
         height: "100px",
-        width: "200px"
+        width: "200px",
+        "&:hover": {
+            backgroundColor: theme.palette.primary.light
+        }
     }
 })
 
@@ -42,13 +46,13 @@ export const AccountPageComponent: React.FunctionComponent<IAccountPageComponent
         <h1>Accounts</h1>
         <Grid container spacing={3}>
             <Grid item xs={12} sm={6} md={4}>
-                <Button className={classes.paper}><h2>USAA Main Checking</h2></Button>
+                <Button className={classes.paper}><h4>USAA Main Checking</h4></Button>
             </Grid>
             <Grid item xs={12} sm={6} md={4}>
-            <Button className={classes.paper}><h2>Skymiles Card</h2></Button>
+                <Button className={classes.paper}><h4>Skymiles Card</h4></Button>
             </Grid>
             <Grid item xs={12} sm={6} md={4}>
-            <Button className={classes.paper}><h2>Uber Visa</h2></Button>
+                <Button className={classes.paper}><h4>Uber Visa</h4></Button>
             </Grid>
         </Grid>
     </div>
