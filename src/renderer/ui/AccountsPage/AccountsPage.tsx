@@ -9,6 +9,8 @@ import {
 } from "@material-ui/core"
 import { withStyles } from "@material-ui/styles"
 import { fontStyle } from "@material-ui/system"
+import { PageComponentProps } from "../App"
+import { Page } from "@/renderer/common/constants"
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -53,17 +55,19 @@ const styles = (theme: Theme) =>
     }
   })
 
-type IAccountPageComponent = WithStyles<typeof styles>
+interface IAccountPageComponent extends WithStyles<typeof styles> {
+  itemClick: () => void
+}
 export const AccountPageComponent: React.FunctionComponent<
   IAccountPageComponent
-> = ({ classes }) => (
+> = ({ itemClick, classes }) => (
   <div className={classes.root}>
     <div className={classes.title}>
       <h1>Accounts</h1>
     </div>
     <Grid container spacing={2}>
       <Grid item>
-        <Button className={classes.paper}>
+        <Button className={classes.paper} onClick={itemClick}>
           <h4>USAA Main Checking</h4>
         </Button>
       </Grid>
@@ -81,4 +85,10 @@ export const AccountPageComponent: React.FunctionComponent<
   </div>
 )
 
-export const AccountPage = withStyles(styles)(AccountPageComponent)
+export const AccountPage: React.FunctionComponent<PageComponentProps> = ({
+  setPage
+}) => {
+  const clickFunction = () => setPage(Page.TRANSACTION_PAGE)
+  const Component = withStyles(styles)(AccountPageComponent)
+  return <Component itemClick={clickFunction} />
+}
