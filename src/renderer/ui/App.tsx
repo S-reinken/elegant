@@ -11,13 +11,13 @@ const theme = createMuiTheme({
       main: "#1C1C1C",
       light: "#262626",
       dark: "#171717",
+      contrastText: "white",
+    },
+    background: {
+      default: "#171717",
     },
   },
 })
-
-const SamplePage: React.FunctionComponent<PageComponentProps> = ({}) => (
-  <div></div>
-)
 
 const pageMap: React.FunctionComponent<PageComponentProps>[] = [
   AccountPage,
