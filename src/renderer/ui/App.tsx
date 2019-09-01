@@ -9,29 +9,19 @@ const theme = createMuiTheme({
     primary: {
       main: "#1C1C1C",
       light: "#262626",
-      dark: "#171717"
-    }
-  }
+      dark: "#171717",
+    },
+  },
 })
 
 const SamplePage: React.FunctionComponent<PageComponentProps> = ({}) => (
   <div></div>
 )
 
-interface PageControllerProps extends PageComponentProps {
-  page: Page
-}
-const PageController: React.FunctionComponent<PageControllerProps> = ({
-  page,
-  setPage
-}) => {
-  switch (page) {
-    case Page.ACCOUNTS_PAGE:
-      return <AccountPage setPage={setPage} />
-    default:
-      return <SamplePage setPage={setPage} />
-  }
-}
+const pageMap: React.FunctionComponent<PageComponentProps>[] = [
+  AccountPage,
+  SamplePage,
+]
 
 export interface PageComponentProps {
   setPage: React.Dispatch<React.SetStateAction<Page>>
@@ -39,9 +29,10 @@ export interface PageComponentProps {
 
 export const App = () => {
   const [currentPage, setPage] = React.useState(Page.ACCOUNTS_PAGE)
+  const PageComponent = pageMap[currentPage]
   return (
     <ThemeProvider theme={theme}>
-      <PageController page={currentPage} setPage={setPage} />
+      <PageComponent setPage={setPage} />
     </ThemeProvider>
   )
 }
