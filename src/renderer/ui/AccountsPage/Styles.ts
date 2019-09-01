@@ -1,29 +1,13 @@
 import { Theme, createStyles } from "@material-ui/core"
+import { RootContainerStyles } from "@/renderer/common/styles/RootStyles"
 
 export const styles = (theme: Theme) =>
   createStyles({
     root: {
-      "& h1,h4": {
-        display: "flex",
-        boxSizing: "border-box",
-        margin: "0",
-        fontWeight: "normal"
-      },
-      padding: theme.spacing(1),
-      background: theme.palette.primary.dark,
-      display: "flex",
-      flexDirection: "column",
-      boxSizing: "border-box",
-      width: "100vw",
-      height: "100vh",
-      color: "white",
-      fontFamily: "Roboto",
-      fontStyle: "regular"
+      ...RootContainerStyles(theme).root,
     },
     title: {
-      borderBottomStyle: "solid",
-      borderBottomColor: theme.palette.primary.light,
-      marginBottom: theme.spacing(1)
+      ...RootContainerStyles(theme).title,
     },
     paper: {
       borderRadius: "0",
@@ -38,7 +22,7 @@ export const styles = (theme: Theme) =>
       height: "100px",
       width: "200px",
       "&:hover": {
-        backgroundColor: theme.palette.primary.light
-      }
-    }
+        backgroundColor: theme.palette.primary.light,
+      },
+    },
   })

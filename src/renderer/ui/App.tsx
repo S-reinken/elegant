@@ -3,6 +3,7 @@ import { AccountPage } from "./AccountsPage"
 import { ThemeProvider } from "@material-ui/styles"
 import { createMuiTheme } from "@material-ui/core"
 import { Page } from "../common/constants"
+import { TransactionsPage } from "./TransactionsPage"
 
 const theme = createMuiTheme({
   palette: {
@@ -20,7 +21,7 @@ const SamplePage: React.FunctionComponent<PageComponentProps> = ({}) => (
 
 const pageMap: React.FunctionComponent<PageComponentProps>[] = [
   AccountPage,
-  SamplePage,
+  TransactionsPage,
 ]
 
 export interface PageComponentProps {
