@@ -5,6 +5,7 @@ import { PageComponentProps } from "../App"
 import { Table, TableBody } from "@material-ui/core"
 import { map } from "lodash/fp"
 import { styles } from "./Styles"
+import { connectToDB } from "@/renderer/db/DB";
 
 const rows = [
   ["8/4/2018", "Such and Such", "UBER", "Expenses:Transportation", "-13.76"],
@@ -45,6 +46,8 @@ const TransactionsPageComponent: React.FunctionComponent<
 export const TransactionsPage: React.FunctionComponent<PageComponentProps> = ({
   setPage,
 }) => {
+  React.useEffect(connectToDB, [])
   const Component = withStyles(styles)(TransactionsPageComponent)
   return <Component />
 }
+
