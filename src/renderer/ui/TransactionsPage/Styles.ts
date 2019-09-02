@@ -12,7 +12,9 @@ export const styles = (theme: Theme) =>
     table: {
       color: "white",
       "& th,tr,td": {
+        backgroundColor: theme.palette.primary.main,
         color: "white",
+        borderBottom: `0.5px solid ${theme.palette.primary.light}`
       },
       minWidth: 650,
     },
