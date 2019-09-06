@@ -7,4 +7,5 @@ export const connectToDB = () => {
         }
         console.log('Connected to the elegant database.');
     })
+    console.log("Hello??")
 }

@@ -2,6 +2,7 @@ const lodash = require('lodash');
 const CopyPkgJsonPlugin = require('copy-pkg-json-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
+var nodeExternals = require('webpack-node-externals');
 
 function srcPaths(src) {
   return path.join(__dirname, src);
@@ -15,6 +16,7 @@ const commonConfig = {
   devtool: isEnvDevelopment ? 'source-map' : false,
   mode: isEnvProduction ? 'production' : 'development',
   output: { path: srcPaths('dist') },
+  externals: [nodeExternals()],
   node: { __dirname: false, __filename: false },
   resolve: {
     alias: {

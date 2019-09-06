@@ -1,6 +1,7 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, ipcMain } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
+import { connectToDB } from "./DB"
 
 let mainWindow: BrowserWindow | null;
 
@@ -31,6 +32,7 @@ function createWindow(): void {
         // when you should delete the corresponding element.
         mainWindow = null;
     });
+    ipcMain.on("test", connectToDB)
 }
 
 // This method will be called when Electron has finished
