@@ -45,6 +45,14 @@ const TransactionsPageComponent: React.FunctionComponent<
 export const TransactionsPage: React.FunctionComponent<PageComponentProps> = ({
   setPage,
 }) => {
+  React.useEffect(() => {
+    fetch("http://localhost:8080/").then((res) => {
+      console.log(res)
+      return res.json()
+    }).then((result) => {
+      console.log(result.text)
+    })
+  }, [])
   const Component = withStyles(styles)(TransactionsPageComponent)
   return <Component />
 }

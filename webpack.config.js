@@ -31,7 +31,7 @@ const commonConfig = {
     rules: [
       {
         test: /\.(ts|tsx)$/,
-        exclude: /node_modules/,
+        exclude: [/node_modules/, /server/],
         loader: 'ts-loader',
       },
       {
