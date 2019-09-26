@@ -3,19 +3,18 @@ const express = require( "express" );
 const app = express();
 const port = 8080; // default port to listen
 
-const connectToDB = () => {
-    let db = new sqlite3.Database("~/elegant.db", (err) => {
-        if (err) {
-            console.error(err.message)
-        }
-        console.log('Connected to the elegant database.');
-    })
-    console.log("Hello??")
-}
+let db = new sqlite3.Database("./elegant.db", (err) => {
+    if (err) {
+        console.error(err.message)
+    }
+    console.log('Connected to the elegant database.');
+})
 
-connectToDB()
 // define a route handler for the default home page
 app.get( "/", ( req: any, res: any) => {
+    db.each('SELECT * FROM transactions', (err, row) => {
+        console.log(row + "\t" + row.date)
+    })
     res.send( { text: "Hello world!"} );
 } );
 
