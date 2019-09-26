@@ -12,10 +12,9 @@ let db = new sqlite3.Database("./elegant.db", (err) => {
 
 // define a route handler for the default home page
 app.get( "/", ( req: any, res: any) => {
-    db.each('SELECT * FROM transactions', (err, row) => {
-        console.log(row + "\t" + row.date)
+    db.all('SELECT * FROM transactions', (err, rows) => {
+        res.send( rows );
     })
-    res.send( { text: "Hello world!"} );
 } );
 
 // start the Express server
