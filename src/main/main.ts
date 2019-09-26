@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, Menu, MenuItem } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 
@@ -14,6 +14,18 @@ function createWindow(): void {
             devTools: process.env.NODE_ENV === 'production' ? false : true
         }
     });
+    const menu = Menu.buildFromTemplate([
+        {
+            label: "File",
+            submenu: [
+                {label: "Import AMEX CSV"}
+            ]
+        },
+        {
+            label: "Jam"
+        }
+    ])
+    Menu.setApplicationMenu(menu)
 
     // and load the index.html of the app.
     mainWindow.loadURL(
