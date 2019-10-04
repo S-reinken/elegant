@@ -1,4 +1,6 @@
-import { app, BrowserWindow, Menu, MenuItem } from 'electron';
+import { app, BrowserWindow, Menu, MenuItem, dialog } from 'electron';
+import fs from "fs";
+import csv from "csv-parser";
 import * as path from 'path';
 import * as url from 'url';
 
@@ -13,12 +15,29 @@ function createWindow(): void {
             webSecurity: false,
             devTools: process.env.NODE_ENV === 'production' ? false : true
         }
-    });
+    }); 
+    const upload = () => {
+        const results: any = []
+        const filePath = dialog.showOpenDialog({title: "Upload CSV"})
+        fs.createReadStream(filePath[0])
+            .pipe(csv())
+            .on('data', (data) => results.push(data))
+            .on('end', () => {
+                console.log(results);
+                // [
+                //   { NAME: 'Daffy Duck', AGE: '24' },
+                //   { NAME: 'Bugs Bunny', AGE: '22' }
+                // ]
+            });
+    }
     const menu = Menu.buildFromTemplate([
         {
             label: "File",
             submenu: [
-                {label: "Import AMEX CSV"}
+                {
+                    label: "Import AMEX CSV",
+                    click: upload,
+                }
             ]
         },
         {
