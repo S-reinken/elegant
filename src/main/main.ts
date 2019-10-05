@@ -3,6 +3,7 @@ import * as fs from "fs";
 import * as csv from "csv-parser";
 import * as path from 'path';
 import * as url from 'url';
+import fetch from 'electron-fetch'
 
 let mainWindow: BrowserWindow | null;
 
@@ -23,21 +24,13 @@ function createWindow(): void {
             .pipe(csv())
             .on('data', (data) => results.push(data))
             .on('end', () => {
-                console.log(results);
-                // [
-                //   { NAME: 'Daffy Duck', AGE: '24' },
-                //   { NAME: 'Bugs Bunny', AGE: '22' }
-                // ]
+                // console.log(results);
+                fetch("http://localhost:8080/csv", {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(results)
+                })
             });
-        // fs.readFile(filePath[0], 'utf-8', (err, data) => {
-        //     if(err){
-        //         console.log("An error ocurred reading the file :" + err.message);
-        //         return;
-        //     }
-    
-        //     // Change how to handle the file content
-        //     console.log("The file content is : " + data);
-        // });
     }
     const menu = Menu.buildFromTemplate([
         {
