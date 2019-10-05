@@ -1,5 +1,5 @@
 import { app, BrowserWindow, Menu, MenuItem, dialog } from 'electron';
-import fs from "fs";
+import * as fs from "fs";
 import csv from "csv-parser";
 import * as path from 'path';
 import * as url from 'url';
@@ -19,16 +19,15 @@ function createWindow(): void {
     const upload = () => {
         const results: any = []
         const filePath = dialog.showOpenDialog({title: "Upload CSV"})
-        fs.createReadStream(filePath[0])
-            .pipe(csv())
-            .on('data', (data) => results.push(data))
-            .on('end', () => {
-                console.log(results);
-                // [
-                //   { NAME: 'Daffy Duck', AGE: '24' },
-                //   { NAME: 'Bugs Bunny', AGE: '22' }
-                // ]
-            });
+        fs.readFile(filePath[0], 'utf-8', (err, data) => {
+            if(err){
+                console.log("An error ocurred reading the file :" + err.message);
+                return;
+            }
+    
+            // Change how to handle the file content
+            console.log("The file content is : " + data);
+        });
     }
     const menu = Menu.buildFromTemplate([
         {
