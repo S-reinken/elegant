@@ -24,7 +24,6 @@ function createWindow(): void {
             .pipe(csv())
             .on('data', (data) => results.push(data))
             .on('end', () => {
-                // console.log(results);
                 fetch("http://localhost:8080/csv", {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
