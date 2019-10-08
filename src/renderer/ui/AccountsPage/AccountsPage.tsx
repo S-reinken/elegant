@@ -5,20 +5,20 @@ import {
   createStyles,
   Paper,
   Button,
-  Grid
+  Grid,
 } from "@material-ui/core"
-import { withStyles } from "@material-ui/styles"
-import { fontStyle } from "@material-ui/system"
-import { PageComponentProps } from "../App"
-import { Page } from "@/renderer/common/constants"
-import { styles } from "./Styles"
+import {withStyles} from "@material-ui/styles"
+import {fontStyle} from "@material-ui/system"
+import {Page} from "@/renderer/common/constants"
+import {styles} from "./Styles"
+import {PageComponentProps} from "../Layout"
 
 interface IAccountPageComponent extends WithStyles<typeof styles> {
   itemClick: () => void
 }
 export const AccountPageComponent: React.FunctionComponent<
   IAccountPageComponent
-> = ({ itemClick, classes }) => (
+> = ({itemClick, classes}) => (
   <div className={classes.root}>
     <div className={classes.title}>
       <h1>Accounts</h1>
@@ -44,7 +44,7 @@ export const AccountPageComponent: React.FunctionComponent<
 )
 
 export const AccountPage: React.FunctionComponent<PageComponentProps> = ({
-  setPage
+  setPage,
 }) => {
   const clickFunction = () => setPage(Page.TRANSACTION_PAGE)
   const Component = withStyles(styles)(AccountPageComponent)

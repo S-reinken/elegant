@@ -1,10 +1,10 @@
-import { TableHead, TableRow, TableCell } from "@material-ui/core"
-import { WithStyles, withStyles } from "@material-ui/styles"
+import {TableHead, TableRow, TableCell} from "@material-ui/core"
+import {WithStyles, withStyles} from "@material-ui/styles"
 import * as React from "react"
-import { PageComponentProps } from "../App"
-import { Table, TableBody } from "@material-ui/core"
-import { map } from "lodash/fp"
-import { styles } from "./Styles"
+import {Table, TableBody} from "@material-ui/core"
+import {map} from "lodash/fp"
+import {styles} from "./Styles"
+import {PageComponentProps} from "../Layout"
 
 const createRow = map((item: string) => <TableCell>{item}</TableCell>)
 const createTableBody = map((row: string[]) => (
@@ -17,7 +17,7 @@ interface TransactionsPageComponentProps extends WithStyles<typeof styles> {
 
 const TransactionsPageComponent: React.FunctionComponent<
   TransactionsPageComponentProps
-> = ({ classes, rows }) => (
+> = ({classes, rows}) => (
   <div className={classes.root}>
     <div className={classes.title}>
       <h1>Transactions</h1>
@@ -42,12 +42,14 @@ export const TransactionsPage: React.FunctionComponent<PageComponentProps> = ({
 }) => {
   const [rowArray, setRows] = React.useState([])
   React.useEffect(() => {
-    fetch("http://localhost:8080/").then((res) => {
-      return res.json()
-    }).then((result) => {
-      setRows(result)
-    })
+    fetch("http://localhost:8080/")
+      .then(res => {
+        return res.json()
+      })
+      .then(result => {
+        setRows(result)
+      })
   }, [])
   const Component = withStyles(styles)(TransactionsPageComponent)
-  return <Component rows={rowArray}/>
+  return <Component rows={rowArray} />
 }

@@ -1,5 +1,5 @@
-import { Theme, createStyles } from "@material-ui/core"
-import { RootContainerStyles } from "@/renderer/common/styles/RootStyles"
+import {Theme, createStyles} from "@material-ui/core"
+import {RootContainerStyles} from "@/renderer/common/styles/RootStyles"
 
 export const styles = (theme: Theme) =>
   createStyles({

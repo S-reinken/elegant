@@ -1,9 +1,10 @@
 import * as React from "react"
-import { AccountPage } from "./AccountsPage"
-import { ThemeProvider } from "@material-ui/styles"
-import { createMuiTheme } from "@material-ui/core"
-import { Page } from "../common/constants"
-import { TransactionsPage } from "./TransactionsPage"
+import {AccountPage} from "./AccountsPage"
+import {ThemeProvider} from "@material-ui/styles"
+import {createMuiTheme} from "@material-ui/core"
+import {Page} from "../common/constants"
+import {TransactionsPage} from "./TransactionsPage"
+import {MainLayout} from "./Layout"
 
 const theme = createMuiTheme({
   palette: {
@@ -19,21 +20,8 @@ const theme = createMuiTheme({
   },
 })
 
-const pageMap: React.FunctionComponent<PageComponentProps>[] = [
-  AccountPage,
-  TransactionsPage,
-]
-
-export interface PageComponentProps {
-  setPage: React.Dispatch<React.SetStateAction<Page>>
-}
-
-export const App = () => {
-  const [currentPage, setPage] = React.useState(Page.ACCOUNTS_PAGE)
-  const PageComponent = pageMap[currentPage]
-  return (
-    <ThemeProvider theme={theme}>
-      <PageComponent setPage={setPage} />
-    </ThemeProvider>
-  )
-}
+export const App = () => (
+  <ThemeProvider theme={theme}>
+    <MainLayout />
+  </ThemeProvider>
+)

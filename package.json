@@ -41,6 +41,8 @@
   },
   "devDependencies": {
     "@material-ui/core": "^4.3.3",
+    "@mdi/js": "^4.4.95",
+    "@mdi/react": "^1.2.1",
     "@types/lodash": "^4.14.138",
     "@types/material-ui": "^0.21.7",
     "@types/mocha": "^5.2.5",
