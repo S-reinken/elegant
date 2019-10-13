@@ -15,25 +15,32 @@ const pageMap: React.FunctionComponent<PageComponentProps>[] = [
 ]
 
 export interface PageComponentProps {
-  setPage: React.Dispatch<React.SetStateAction<Page>>
+  setPage: React.Dispatch<React.SetStateAction<{component: Page; props: any}>>
 }
 
 export const MainLayoutComponent: React.FunctionComponent<
   WithStyles<typeof styles>
 > = ({classes}) => {
-  const [currentPage, setPage] = React.useState(Page.ACCOUNTS_PAGE)
-  const PageComponent = pageMap[currentPage]
+  const [{component, props}, setPage] = React.useState({
+    component: Page.ACCOUNTS_PAGE,
+    props: {},
+  })
+  const PageComponent = pageMap[component]
   return (
     <div className={classes.root}>
       <div className={classes.sidebar}>
-        <div onClick={() => setPage(Page.ACCOUNTS_PAGE)}>
+        <div
+          onClick={() => setPage({component: Page.ACCOUNTS_PAGE, props: {}})}
+        >
           <Icon path={mdiCreditCardMultiple} className={classes.icon} />
         </div>
-        <div onClick={() => setPage(Page.CATEGORIES_PAGE)}>
+        <div
+          onClick={() => setPage({component: Page.CATEGORIES_PAGE, props: {}})}
+        >
           <Icon path={mdiFileCabinet} className={classes.icon} />
         </div>
       </div>
-      <PageComponent setPage={setPage} />
+      <PageComponent setPage={setPage} {...props} />
     </div>
   )
 }

@@ -45,7 +45,7 @@ function createWindow(): void {
       label: "Jam",
     },
   ])
-  Menu.setApplicationMenu(menu)
+  //   Menu.setApplicationMenu(menu)
 
   // and load the index.html of the app.
   mainWindow.loadURL(
