@@ -20,52 +20,59 @@ type ICategoriesPageProps = WithStyles<typeof styles> & PageComponentProps
 
 const CategoriesPageComponent: React.FunctionComponent<
   ICategoriesPageProps
-> = ({classes, setPage}) => (
-  <div className={classes.root}>
-    <div className={classes.title}>
-      <h1>Accounts</h1>
+> = ({classes, setPage}) => {
+  let accounts = {}
+  React.useEffect(() => {}, [])
+
+  return (
+    <div className={classes.root}>
+      <div className={classes.title}>
+        <h1>Accounts</h1>
+      </div>
+      <TreeView
+        defaultCollapseIcon={<ExpandMore />}
+        defaultExpandIcon={<ChevronRight />}
+      >
+        <TreeItem nodeId={"24"} label={"Assets"}>
+          <TreeItem nodeId={"25"} label={"Checking Account"} />
+          <TreeItem
+            nodeId={"26"}
+            label={"Savings Account"}
+            onClick={() =>
+              setPage({component: Page.TRANSACTION_PAGE, props: {}})
+            }
+          />
+        </TreeItem>
+        <TreeItem nodeId={"1"} label={"Income"}>
+          <TreeItem nodeId={"5"} label={"Salary"} />
+          <TreeItem nodeId={"6"} label={"Investments"} />
+        </TreeItem>
+        <TreeItem nodeId={"2"} label={"Expenses"}>
+          <TreeItem nodeId={"15"} label={"Auto"}>
+            <TreeItem nodeId={"16"} label={"Gas"} />
+            <TreeItem nodeId={"17"} label={"Maintenance"} />
+          </TreeItem>
+          <TreeItem nodeId={"4"} label={"Food"}>
+            <TreeItem nodeId={"18"} label={"Dining"} />
+            <TreeItem nodeId={"19"} label={"Groceries"} />
+            <TreeItem nodeId={"20"} label={"Delivery"} />
+          </TreeItem>
+          <TreeItem nodeId={"9"} label={"Rent"} />
+          <TreeItem nodeId={"10"} label={"Utilities"}>
+            <TreeItem nodeId={"11"} label={"Water"} />
+            <TreeItem nodeId={"12"} label={"Gas"} />
+            <TreeItem nodeId={"13"} label={"Electricity"} />
+            <TreeItem nodeId={"14"} label={"Internet"} />
+          </TreeItem>
+          <TreeItem nodeId={"21"} label={"Entertainment"}>
+            <TreeItem nodeId={"22"} label={"Games"} />
+            <TreeItem nodeId={"23"} label={"Shows"} />
+          </TreeItem>
+        </TreeItem>
+      </TreeView>
     </div>
-    <TreeView
-      defaultCollapseIcon={<ExpandMore />}
-      defaultExpandIcon={<ChevronRight />}
-    >
-      <TreeItem nodeId={"24"} label={"Assets"}>
-        <TreeItem nodeId={"25"} label={"Checking Account"} />
-        <TreeItem
-          nodeId={"26"}
-          label={"Savings Account"}
-          onClick={() => setPage({component: Page.TRANSACTION_PAGE, props: {}})}
-        />
-      </TreeItem>
-      <TreeItem nodeId={"1"} label={"Income"}>
-        <TreeItem nodeId={"5"} label={"Salary"} />
-        <TreeItem nodeId={"6"} label={"Investments"} />
-      </TreeItem>
-      <TreeItem nodeId={"2"} label={"Expenses"}>
-        <TreeItem nodeId={"15"} label={"Auto"}>
-          <TreeItem nodeId={"16"} label={"Gas"} />
-          <TreeItem nodeId={"17"} label={"Maintenance"} />
-        </TreeItem>
-        <TreeItem nodeId={"4"} label={"Food"}>
-          <TreeItem nodeId={"18"} label={"Dining"} />
-          <TreeItem nodeId={"19"} label={"Groceries"} />
-          <TreeItem nodeId={"20"} label={"Delivery"} />
-        </TreeItem>
-        <TreeItem nodeId={"9"} label={"Rent"} />
-        <TreeItem nodeId={"10"} label={"Utilities"}>
-          <TreeItem nodeId={"11"} label={"Water"} />
-          <TreeItem nodeId={"12"} label={"Gas"} />
-          <TreeItem nodeId={"13"} label={"Electricity"} />
-          <TreeItem nodeId={"14"} label={"Internet"} />
-        </TreeItem>
-        <TreeItem nodeId={"21"} label={"Entertainment"}>
-          <TreeItem nodeId={"22"} label={"Games"} />
-          <TreeItem nodeId={"23"} label={"Shows"} />
-        </TreeItem>
-      </TreeItem>
-    </TreeView>
-  </div>
-)
+  )
+}
 
 export const CategoriesPage: React.FunctionComponent<
   PageComponentProps
