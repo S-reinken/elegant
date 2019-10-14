@@ -1,22 +1,18 @@
 import * as express from "express"
 import {processCSVRequest} from "./import"
-import {sqlDB} from "./db"
-import {getAccounts} from "./accounts"
+import {IO} from "monet"
+import {getAll} from "./accounts"
 
 const app = express()
 app.use(express.json())
 const port = 8080 // default port to listen
 
 const request = (fn: any) => (req: any, res: any) => res.send(fn(req.body))
+const settle = (ioObj: IO<Promise<any>>) => (req: any, res: any) =>
+  ioObj.run().then(val => res.send(val))
 
-app.get("/", (req: any, res: any) => {
-  sqlDB.all("SELECT * FROM transactions", (err, rows) => {
-    res.send(rows)
-  })
-})
-app.get("/accounts", request(getAccounts))
-
-app.post("/csv", processCSVRequest)
+app.get("/accounts", settle(getAll("accounts")))
+app.post("/csv", request(processCSVRequest))
 
 // start the Express server
 app.listen(port, () => {

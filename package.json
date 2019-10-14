@@ -5,7 +5,7 @@
   "main": "./dist/main.bundle.js",
   "scripts": {
     "start": "electron ./dist/main.bundle.js",
-    "build-server": "tsc ./src/server/* --outDir ./dist/server -w",
+    "build-server": "tsc --build ./tsconfig.server.json -w",
     "start-server": "node ./dist/server/index.js",
     "dev": "rimraf dist && cross-env NODE_ENV=development webpack --watch --progress --colors",
     "prod": "rimraf dist && cross-env NODE_ENV=production webpack --progress --colors",

@@ -5,6 +5,7 @@ import {PageComponentProps} from "../Layout"
 import {TreeView, TreeItem} from "@material-ui/lab"
 import {ExpandMore, ChevronRight} from "@material-ui/icons"
 import {Page} from "@/renderer/common/constants"
+import {map} from "lodash/fp"
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -22,8 +23,12 @@ const CategoriesPageComponent: React.FunctionComponent<
   ICategoriesPageProps
 > = ({classes, setPage}) => {
   let accounts = {}
-  React.useEffect(() => {}, [])
-
+  const [rowArray, setRows] = React.useState([])
+  React.useEffect(() => {
+    fetch("http://localhost:8080/accounts")
+      .then(res => res.json())
+      .then(setRows)
+  }, [])
   return (
     <div className={classes.root}>
       <div className={classes.title}>
@@ -33,7 +38,13 @@ const CategoriesPageComponent: React.FunctionComponent<
         defaultCollapseIcon={<ExpandMore />}
         defaultExpandIcon={<ChevronRight />}
       >
-        <TreeItem nodeId={"24"} label={"Assets"}>
+        {map(
+          (row: any) => (
+            <TreeItem nodeId={row.id} label={row.name} />
+          ),
+          rowArray
+        )}
+        {/* <TreeItem nodeId={"24"} label={"Assets"}>
           <TreeItem nodeId={"25"} label={"Checking Account"} />
           <TreeItem
             nodeId={"26"}
@@ -68,7 +79,7 @@ const CategoriesPageComponent: React.FunctionComponent<
             <TreeItem nodeId={"22"} label={"Games"} />
             <TreeItem nodeId={"23"} label={"Shows"} />
           </TreeItem>
-        </TreeItem>
+        </TreeItem> */}
       </TreeView>
     </div>
   )

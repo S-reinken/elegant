@@ -2,7 +2,7 @@ import {TableHead, TableRow, TableCell} from "@material-ui/core"
 import {WithStyles, withStyles} from "@material-ui/styles"
 import * as React from "react"
 import {Table, TableBody} from "@material-ui/core"
-import {map} from "lodash/fp"
+import {map, prop} from "lodash/fp"
 import {styles} from "./Styles"
 import {PageComponentProps} from "../Layout"
 
@@ -43,12 +43,8 @@ export const TransactionsPage: React.FunctionComponent<PageComponentProps> = ({
   const [rowArray, setRows] = React.useState([])
   React.useEffect(() => {
     fetch("http://localhost:8080/")
-      .then(res => {
-        return res.json()
-      })
-      .then(result => {
-        setRows(result)
-      })
+      .then(res => res.json())
+      .then(setRows)
   }, [])
   const Component = withStyles(styles)(TransactionsPageComponent)
   return <Component rows={rowArray} />
