@@ -1,5 +1,6 @@
-import {map, prop, compose} from "lodash/fp"
-import {DB, mmap} from "./db"
+import {map, prop, compose, forEach} from "lodash/fp"
+import {DB, mmap, bind, runQuery} from "./db"
+import {List, IO} from "monet"
 
 type AmexTransaction = {
   Date: string
@@ -7,14 +8,18 @@ type AmexTransaction = {
   Category: string
   Amount: string
 }
-const makeInserts = map(
-  (obj: AmexTransaction) =>
-    `INSERT INTO transactions values("${obj.Date}", "NONE", "${obj.Description}", "${obj.Category}", "${obj.Amount}")`
-)
-const runQuery = (q: DB<string>) => q.runQuery()
+const makeInserts = (obj: AmexTransaction) =>
+  List.from([
+    `INSERT INTO transactions values("${obj.Date}", "${obj.Amount}")`,
+    `INSERT INTO account_transactions values("AMEX (id)", "transaction id?", false)`,
+    `INSERT INTO account_transactions values("${obj.Category}", "transaction id?", true)`,
+  ])
+
+const sequenceIO = (list: List<IO<any>>) => list.sequenceIO()
 
 export const processCSVRequest = compose(
-  runQuery,
-  mmap(makeInserts),
-  DB.of
+  sequenceIO,
+  mmap(runQuery),
+  bind(makeInserts),
+  List.from
 )
