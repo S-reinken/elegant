@@ -3,7 +3,9 @@ import * as fs from "fs"
 import * as csv from "csv-parser"
 import * as path from "path"
 import * as url from "url"
+import {option, map} from "fp-ts/lib/Option"
 import fetch from "electron-fetch"
+import {flow} from "fp-ts/lib/function"
 
 let mainWindow: BrowserWindow | null
 
@@ -33,19 +35,34 @@ function createWindow(): void {
   }
   const menu = Menu.buildFromTemplate([
     {
+      label: app.getName(),
+    },
+    {
       label: "File",
       submenu: [
         {
           label: "Import AMEX CSV",
           click: upload,
         },
+        {role: "toggledevtools"},
       ],
     },
-    {
-      label: "Jam",
-    },
   ])
-  //   Menu.setApplicationMenu(menu)
+  // const currentMenu = option.of(Menu.getApplicationMenu())
+  // flow(
+  //   map<Menu | null, Menu>((menu: Menu) => {
+  //     menu.items.push({
+  //       label: "Import AMEX CSV",
+  //       checked: false,
+  //       enabled: true,
+  //       visible: true,
+  //       click: upload,
+  //     })
+  //     return menu
+  //   }),
+  //   map(Menu.setApplicationMenu)
+  // )(currentMenu)
+  Menu.setApplicationMenu(menu)
 
   // and load the index.html of the app.
   mainWindow.loadURL(

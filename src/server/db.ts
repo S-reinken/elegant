@@ -1,6 +1,7 @@
 import * as sqlite3 from "sqlite3"
 import {forEach, curry} from "lodash/fp"
 import {IO, IMonad} from "monet"
+import {taskify, tryCatch} from "fp-ts/lib/TaskEither"
 
 export const sqlDB = new sqlite3.Database("./elegant.db", err => {
   if (err) {
@@ -38,8 +39,26 @@ export const bind = curry(<A, B>(fn: (arg: A) => IMonad<B>, monad: IMonad<A>) =>
   monad.flatMap(fn)
 )
 
+// export const queryAll = (query: string) =>
+//   IO(() => new Promise(resolve => sqlDB.all(query, (err, res) => resolve(res))))
+
 export const queryAll = (query: string) =>
-  IO(() => new Promise(resolve => sqlDB.all(query, (err, res) => resolve(res))))
+  tryCatch<Error, string[]>(
+    () => new Promise(resolve => sqlDB.all(query, (err, res) => resolve(res))),
+    error => new Error(String(error))
+  )
 
 export const runQuery = (query: string) =>
-  IO(() => new Promise(resolve => sqlDB.run(query, res => resolve(res))))
+  tryCatch<Error, sqlite3.RunResult>(
+    () =>
+      new Promise(resolve =>
+        sqlDB.run(query, () => {
+          console.log(`Object: ${String(this)}`)
+          resolve(this.lastId)
+        })
+      ),
+    error => new Error(String(error))
+  )
+
+// export const runQuery = (query: string) =>
+//   IO(() => new Promise(resolve => sqlDB.run(query, res => resolve(res))))

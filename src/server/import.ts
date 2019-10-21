@@ -1,6 +1,8 @@
-import {map, prop, compose, forEach} from "lodash/fp"
-import {DB, mmap, bind, runQuery} from "./db"
-import {List, IO} from "monet"
+import {runQuery} from "./db"
+import {map, array} from "fp-ts/lib/Array"
+import {taskEither, chain} from "fp-ts/lib/TaskEither"
+import {flow} from "fp-ts/lib/function"
+import {pipe} from "fp-ts/lib/pipeable"
 
 type AmexTransaction = {
   Date: string
@@ -9,17 +11,21 @@ type AmexTransaction = {
   Amount: string
 }
 const makeInserts = (obj: AmexTransaction) =>
-  List.from([
-    `INSERT INTO transactions values("${obj.Date}", "${obj.Amount}")`,
-    `INSERT INTO account_transactions values("AMEX (id)", "transaction id?", false)`,
-    `INSERT INTO account_transactions values("${obj.Category}", "transaction id?", true)`,
-  ])
+  pipe(
+    runQuery(`INSERT INTO transactions values("${obj.Date}", "${obj.Amount}")`),
+    chain(result =>
+      array.sequence(taskEither)([
+        runQuery(
+          `INSERT INTO account_transactions values("1", "${result}", false)`
+        ),
+        runQuery(
+          `INSERT INTO account_transactions values("${obj.Category}", "${result}", true)`
+        ),
+      ])
+    )
+  )
 
-const sequenceIO = (list: List<IO<any>>) => list.sequenceIO()
-
-export const processCSVRequest = compose(
-  sequenceIO,
-  mmap(runQuery),
-  bind(makeInserts),
-  List.from
+export const processCSVRequest = flow(
+  map(makeInserts),
+  array.sequence(taskEither)
 )
