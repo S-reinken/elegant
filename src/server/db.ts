@@ -53,7 +53,8 @@ export const runQuery = (query: string) =>
     () =>
       new Promise(resolve =>
         sqlDB.run(query, () => {
-          console.log(`Object: ${String(this)}`)
+          console.log(`Query: ${JSON.stringify(query)}`)
+          console.log(`Object: ${JSON.stringify(this)}`)
           resolve(this.lastId)
         })
       ),

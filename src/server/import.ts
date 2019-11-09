@@ -12,14 +12,14 @@ type AmexTransaction = {
 }
 const makeInserts = (obj: AmexTransaction) =>
   pipe(
-    runQuery(`INSERT INTO transactions values("${obj.Date}", "${obj.Amount}")`),
+    runQuery(`INSERT INTO transactions(date, amount) values("${obj.Date}", "${obj.Amount}")`),
     chain(result =>
       array.sequence(taskEither)([
         runQuery(
-          `INSERT INTO account_transactions values("1", "${result}", false)`
+          `INSERT INTO account_transactions(accountId, transactionId, isReceiver) values("1", "${result}", false)`
         ),
         runQuery(
-          `INSERT INTO account_transactions values("${obj.Category}", "${result}", true)`
+          `INSERT INTO account_transactions(accountId, transactionId, isReceiver) values("${obj.Category}", "${result}", true)`
         ),
       ])
     )
