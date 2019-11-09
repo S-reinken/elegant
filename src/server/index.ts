@@ -1,8 +1,7 @@
 import * as express from "express"
 import {processCSVRequest} from "./import"
-import {IO} from "monet"
-import {getAll} from "./accounts"
 import {TaskEither} from "fp-ts/lib/TaskEither"
+import {getAll} from "./db"
 
 const app = express()
 app.use(express.json())
@@ -15,6 +14,7 @@ const request = (fn: (arg: any) => TaskEither<any, any>) => (
 const settle = (task: TaskEither<any, any>) => (req: any, res: any) =>
   task().then(val => res.send(val))
 
+app.get("/transactions", settle(getAll("transactions")))
 app.get("/accounts", settle(getAll("accounts")))
 app.post("/csv", request(processCSVRequest))
 

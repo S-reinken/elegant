@@ -1,14 +1,6 @@
 import * as React from "react"
-import {
-  Theme,
-  WithStyles,
-  createStyles,
-  Paper,
-  Button,
-  Grid,
-} from "@material-ui/core"
+import {WithStyles, Button, Grid} from "@material-ui/core"
 import {withStyles} from "@material-ui/styles"
-import {fontStyle} from "@material-ui/system"
 import {Page} from "@/renderer/common/constants"
 import {styles} from "./Styles"
 import {PageComponentProps} from "../Layout"
