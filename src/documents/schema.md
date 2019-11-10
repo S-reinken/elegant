@@ -34,8 +34,18 @@ If you notice, we have a problem above of having a many-to-many relationship bet
 
 The Account-Transaction Table looks like this:
 
-- Account (Id)
-- Transaction (Id)
-- Is_Receiver (boolean)
+- accountId (Id)
+- transactionId (Id)
+- is_Receiver (boolean)
+
+## Account-Alias
+
+One major feature of Elegant is the ability to import from a variety of banks and credit card companies. In order to do this efficiently, we need a lookup table that will represent the user's settings for which receivers will translate to which accounts
+
+The Account_Alias table looks like this:
+
+- accountId (id)
+- import_type (text)
+- alias (text)
 
 ### Example
