@@ -18,11 +18,14 @@ export const queryAll = (query: string) =>
   )
 
 export const runQuery = (query: string) =>
-  tryCatch<Error, sqlite3.RunResult>(
+  tryCatch<Error, number>(
     () =>
       new Promise(resolve =>
-        sqlDB.run(query, () => {
-          resolve(this.lastId)
+        sqlDB.run(query, function(err) {
+          if (err) {
+            throw err
+          }
+          resolve(this.lastID)
         })
       ),
     error => new Error(String(error))

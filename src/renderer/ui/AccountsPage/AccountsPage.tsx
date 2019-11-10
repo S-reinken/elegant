@@ -39,7 +39,7 @@ export const AccountPage: React.FunctionComponent<PageComponentProps> = ({
   setPage,
 }) => {
   const clickFunction = () =>
-    setPage({component: Page.TRANSACTION_PAGE, props: {}})
+    setPage({component: Page.TRANSACTION_PAGE, props: {accountId: 1}})
   const Component = withStyles(styles)(AccountPageComponent)
   return <Component itemClick={clickFunction} />
 }

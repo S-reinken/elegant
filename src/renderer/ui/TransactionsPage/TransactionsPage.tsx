@@ -21,6 +21,9 @@ const createTableBody = map((transaction: Transaction) => (
 interface TransactionsPageComponentProps extends WithStyles<typeof styles> {
   rows: Transaction[]
 }
+interface TransactionPageProps extends PageComponentProps {
+  accountId: number
+}
 
 const TransactionsPageComponent: React.FunctionComponent<
   TransactionsPageComponentProps
@@ -41,12 +44,12 @@ const TransactionsPageComponent: React.FunctionComponent<
   </div>
 )
 
-export const TransactionsPage: React.FunctionComponent<PageComponentProps> = ({
-  setPage,
-}) => {
+export const TransactionsPage: React.FunctionComponent<
+  TransactionPageProps
+> = ({setPage, accountId}) => {
   const [rowArray, setRows] = React.useState([] as Transaction[])
   const getRows = pipe(
-    getTransactions,
+    getTransactions(accountId),
     fold(
       e => {
         throw e

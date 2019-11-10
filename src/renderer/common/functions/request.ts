@@ -4,14 +4,20 @@ import {Either, fold} from "fp-ts/lib/Either"
 import {TaskEither} from "fp-ts/lib/TaskEither"
 import {Account, Transaction} from "@/common/types"
 
-export const request = (url: string): Task<Response> => () => fetch(url)
+export const request = (
+  url: string,
+  body?: RequestInit
+): Task<Response> => () => fetch(url, body)
 const getJSON = (res: Response): TaskEither<Error, any> => () =>
   res.json() as Promise<Either<Error, any>>
 export const getAccounts: TaskEither<Error, Account[]> = pipe(
   request("http://localhost:8080/accounts"),
   chain(getJSON)
 )
-export const getTransactions: TaskEither<Error, Transaction[]> = pipe(
-  request("http://localhost:8080/transactions"),
-  chain(getJSON)
-)
+export const getTransactions = (
+  accountId: number
+): TaskEither<Error, Transaction[]> =>
+  pipe(
+    request(`http://localhost:8080/transactions/${accountId}`),
+    chain(getJSON)
+  )
