@@ -6,6 +6,7 @@ import * as url from "url"
 import {option, map} from "fp-ts/lib/Option"
 import fetch from "electron-fetch"
 import {flow} from "fp-ts/lib/function"
+import {Either, fold} from "fp-ts/lib/Either"
 
 let mainWindow: BrowserWindow | null
 
@@ -31,6 +32,13 @@ function createWindow(): void {
           headers: {"Content-Type": "application/json"},
           body: JSON.stringify(results),
         })
+          .then(value => value.json() as Promise<Either<Error, any>>)
+          .then(
+            fold(
+              err => console.log(`Error processing CSV: ${err.message}`),
+              () => {}
+            )
+          )
       })
   }
   const menu = Menu.buildFromTemplate([

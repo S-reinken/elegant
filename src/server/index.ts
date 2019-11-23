@@ -8,8 +8,10 @@ const app = express()
 app.use(express.json())
 const port = 8080 // default port to listen
 
-const post = (fn: (arg: any) => TaskEither<any, any>) => (req: any, res: any) =>
-  fn(req.body)().then(val => res.send(val))
+const post = <X, Y, Z>(fn: (arg: X) => TaskEither<Y, Z>) => (
+  req: any,
+  res: any
+) => fn(req.body)().then(val => res.send(val))
 
 const get = (fn: (arg: any) => TaskEither<any, any>, param: string) => (
   req: any,

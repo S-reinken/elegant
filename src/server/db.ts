@@ -13,20 +13,48 @@ export const getAll = (tableName: string) =>
 
 export const queryAll = (query: string) =>
   tryCatch<Error, string[]>(
-    () => new Promise(resolve => sqlDB.all(query, (err, res) => resolve(res))),
-    error => new Error(String(error))
+    () =>
+      new Promise((resolve, reject) =>
+        sqlDB.all(query, (err, res) => {
+          if (err) {
+            reject(err)
+          } else {
+            resolve(res)
+          }
+        })
+      ),
+    error =>
+      new Error(`Error with query: ${query}\nError: ${JSON.stringify(error)}`)
+  )
+
+export const queryOne = (query: string) =>
+  tryCatch<Error, string>(
+    () =>
+      new Promise((resolve, reject) =>
+        sqlDB.get(query, (err, res) => {
+          if (err) {
+            reject(err)
+          } else {
+            resolve(res)
+          }
+        })
+      ),
+    error =>
+      new Error(`Error with query: ${query}\nError: ${JSON.stringify(error)}`)
   )
 
 export const runQuery = (query: string) =>
   tryCatch<Error, number>(
     () =>
-      new Promise(resolve =>
+      new Promise((resolve, reject) =>
         sqlDB.run(query, function(err) {
           if (err) {
-            throw err
+            reject(err)
+          } else {
+            resolve(this.lastID)
           }
-          resolve(this.lastID)
         })
       ),
-    error => new Error(String(error))
+    error =>
+      new Error(`Error with query: ${query}\nError: ${JSON.stringify(error)}`)
   )
