@@ -1,8 +1,16 @@
-import {runQuery, queryAll, queryOne} from "./db"
+import {runQuery, queryOne} from "./db"
 import {map, array} from "fp-ts/lib/Array"
-import {taskEither, chain, map as taskMap} from "fp-ts/lib/TaskEither"
+import {
+  taskEither,
+  chain,
+  map as taskMap,
+  TaskEither,
+} from "fp-ts/lib/TaskEither"
 import {flow} from "fp-ts/lib/function"
 import {pipe} from "fp-ts/lib/pipeable"
+import {Option, fold, map as optionMap} from "fp-ts/lib/Option"
+import {someNum, getId, emptyTask, fold2} from "@/common/functions"
+import {AccountResult} from "@/common/types"
 
 type AmexTransaction = {
   Date: string
@@ -11,40 +19,38 @@ type AmexTransaction = {
   Amount: string
 }
 
-const getAccountForCategory = (category: string) =>
+const getAccountForCategory = (
+  category: string
+): TaskEither<Error, Option<AccountResult>> =>
   queryOne(`SELECT accountId FROM account_alias WHERE alias = "${category}"`)
 const insertTransactionEntry = (date: string, amount: string) =>
   runQuery(
     `INSERT INTO transactions(date, amount) values("${date}", "${amount}")`
   )
-const insertSendingEntry = (transactionId: string) =>
+const insertSendingEntry = (transactionId: number) =>
   runQuery(
     `INSERT INTO account_transactions(accountId, transactionId, isReceiver) values("1", "${transactionId}", false)`
   )
-const insertReceivingEntry = (accountId: string, transactionId: string) =>
+const insertReceivingEntry = (accountId: number, transactionId: number) =>
   runQuery(
     `INSERT INTO account_transactions(accountId, transactionId, isReceiver) values("${accountId}", "${transactionId}", false)`
   )
-const makeString = (arg: any) => String(arg)
+
 const makeInserts = (obj: AmexTransaction) =>
   pipe(
     [
-      taskMap(makeString)(insertTransactionEntry(obj.Date, obj.Amount)),
-      getAccountForCategory(obj.Category),
+      taskMap(someNum)(insertTransactionEntry(obj.Date, obj.Amount)),
+      taskMap(optionMap(getId))(getAccountForCategory(obj.Category)),
     ],
     array.sequence(taskEither),
     chain(([transactionRowId, accountId]) =>
       array.sequence(taskEither)([
-        insertSendingEntry(transactionRowId),
-        insertReceivingEntry(accountId, transactionRowId),
+        fold(emptyTask, insertSendingEntry)(transactionRowId),
+        fold2(emptyTask, insertReceivingEntry)(accountId, transactionRowId),
       ])
     )
   )
 
-const trace = <X>(arg: X) => {
-  console.log(JSON.stringify(arg))
-  return arg
-}
 export const processCSVRequest = flow(
   map(makeInserts),
   array.sequence(taskEither)

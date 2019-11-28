@@ -8,8 +8,10 @@ import {pipe} from "fp-ts/lib/pipeable"
 import {getTransactions} from "@/renderer/common/functions"
 import {fold} from "fp-ts/lib/TaskEither"
 import {task} from "fp-ts/lib/Task"
-import {Transaction} from "@/common/types"
-import {map} from "fp-ts/lib/Array"
+import {Transaction, TransactionOrd} from "@/common/types"
+import {map, sort} from "fp-ts/lib/Array"
+import {flow} from "fp-ts/lib/function"
+import {err} from "@/common/functions"
 
 const createTableBody = map((transaction: Transaction) => (
   <TableRow>
@@ -25,38 +27,35 @@ interface TransactionPageProps extends PageComponentProps {
   accountId: number
 }
 
-const TransactionsPageComponent: React.FunctionComponent<
-  TransactionsPageComponentProps
-> = ({classes, rows}) => (
+const TransactionsPageComponent: React.FunctionComponent<TransactionsPageComponentProps> = ({
+  classes,
+  rows,
+}) => (
   <div className={classes.root}>
     <div className={classes.title}>
       <h1>Transactions</h1>
     </div>
-    <Table className={classes.table} size="small">
-      <TableHead>
-        <TableRow>
-          <TableCell>Date</TableCell>
-          <TableCell>Amount</TableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody>{createTableBody(rows)}</TableBody>
-    </Table>
+    <div style={{overflowY: "scroll"}}>
+      <Table className={classes.table} size="small">
+        <TableHead>
+          <TableRow>
+            <TableCell>Date</TableCell>
+            <TableCell>Amount</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>{createTableBody(rows)}</TableBody>
+      </Table>
+    </div>
   </div>
 )
 
-export const TransactionsPage: React.FunctionComponent<
-  TransactionPageProps
-> = ({setPage, accountId}) => {
+export const TransactionsPage: React.FunctionComponent<TransactionPageProps> = ({
+  setPage,
+  accountId,
+}) => {
   const [rowArray, setRows] = React.useState([] as Transaction[])
-  const getRows = pipe(
-    getTransactions(accountId),
-    fold(
-      e => {
-        throw e
-      },
-      a => task.of(setRows(a))
-    )
-  )
+  const updateRows = flow(sort(TransactionOrd), setRows, task.of)
+  const getRows = pipe(getTransactions(accountId), fold(err, updateRows))
 
   React.useEffect(() => {
     getRows()

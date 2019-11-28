@@ -1,5 +1,6 @@
 import * as sqlite3 from "sqlite3"
 import {tryCatch} from "fp-ts/lib/TaskEither"
+import {Option, fromNullable} from "fp-ts/lib/Option"
 
 export const sqlDB = new sqlite3.Database("./elegant.db", err => {
   if (err) {
@@ -28,14 +29,14 @@ export const queryAll = (query: string) =>
   )
 
 export const queryOne = (query: string) =>
-  tryCatch<Error, string>(
+  tryCatch<Error, Option<any>>(
     () =>
       new Promise((resolve, reject) =>
         sqlDB.get(query, (err, res) => {
           if (err) {
             reject(err)
           } else {
-            resolve(res)
+            resolve(fromNullable(res))
           }
         })
       ),

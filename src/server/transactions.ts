@@ -1,5 +1,4 @@
-import {pipe} from "fp-ts/lib/pipeable"
-import {runQuery, getAll, queryAll} from "./db"
+import {queryAll} from "./db"
 
 export const getTransactionsForAccount = (accountId: number) =>
   queryAll(
