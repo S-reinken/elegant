@@ -5,17 +5,18 @@ import {Table, TableBody} from "@material-ui/core"
 import {styles} from "./Styles"
 import {PageComponentProps} from "../Layout"
 import {pipe} from "fp-ts/lib/pipeable"
-import {getTransactions} from "@/renderer/common/functions"
 import {fold} from "fp-ts/lib/TaskEither"
 import {task} from "fp-ts/lib/Task"
-import {Transaction, TransactionOrd} from "@/common/types"
 import {map, sort} from "fp-ts/lib/Array"
 import {flow} from "fp-ts/lib/function"
-import {err} from "@/common/functions"
+import {getTransactions} from "@renderer/common/functions"
+import {TransactionOrd, Transaction} from "@common/types"
+import {err} from "@common/functions"
 
 const createTableBody = map((transaction: Transaction) => (
   <TableRow>
     <TableCell>{transaction.date}</TableCell>
+    <TableCell>{transaction.name}</TableCell>
     <TableCell>{transaction.amount}</TableCell>
   </TableRow>
 ))
@@ -40,6 +41,7 @@ const TransactionsPageComponent: React.FunctionComponent<TransactionsPageCompone
         <TableHead>
           <TableRow>
             <TableCell>Date</TableCell>
+            <TableCell>Account</TableCell>
             <TableCell>Amount</TableCell>
           </TableRow>
         </TableHead>

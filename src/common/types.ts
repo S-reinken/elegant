@@ -9,6 +9,7 @@ export type Account = {
 
 export type Transaction = {
   date: string
+  name: string
   amount: number
 }
 export const TransactionOrd: Ord<Transaction> = {
