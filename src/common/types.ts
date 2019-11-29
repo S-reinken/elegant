@@ -1,5 +1,10 @@
 import {Ord} from "fp-ts/lib/Ord"
 
+export type Alias = {
+  alias: string
+  account: number
+}
+
 export type Account = {
   id: number
   name: string

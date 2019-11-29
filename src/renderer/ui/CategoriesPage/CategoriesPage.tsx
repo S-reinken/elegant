@@ -10,6 +10,7 @@ import {getAccounts} from "@/renderer/common/functions"
 import {fold} from "fp-ts/lib/TaskEither"
 import {Account} from "@/common/types"
 import {task} from "fp-ts/lib/Task"
+import {err} from "@common/functions"
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -23,18 +24,14 @@ const styles = (theme: Theme) =>
 
 type ICategoriesPageProps = WithStyles<typeof styles> & PageComponentProps
 
-const CategoriesPageComponent: React.FunctionComponent<
-  ICategoriesPageProps
-> = ({classes, setPage}) => {
+const CategoriesPageComponent: React.FunctionComponent<ICategoriesPageProps> = ({
+  classes,
+  setPage,
+}) => {
   const [rowArray, setRows] = React.useState([] as Account[])
   const getRows = pipe(
     getAccounts,
-    fold(
-      e => {
-        throw e
-      },
-      a => task.of(setRows(a))
-    )
+    fold(err, a => task.of(setRows(a)))
   )
   React.useEffect(() => {
     getRows()
@@ -59,9 +56,7 @@ const CategoriesPageComponent: React.FunctionComponent<
   )
 }
 
-export const CategoriesPage: React.FunctionComponent<
-  PageComponentProps
-> = props => {
+export const CategoriesPage: React.FunctionComponent<PageComponentProps> = props => {
   const Component = withStyles(styles)(CategoriesPageComponent)
   return <Component {...props} />
 }

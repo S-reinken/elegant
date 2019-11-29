@@ -53,6 +53,7 @@ function createWindow(): void {
           click: upload,
         },
         {role: "toggledevtools"},
+        {role: "reload"},
       ],
     },
   ])
