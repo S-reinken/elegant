@@ -9,8 +9,8 @@ import {
 import {flow} from "fp-ts/lib/function"
 import {pipe} from "fp-ts/lib/pipeable"
 import {Option, fold, map as optionMap} from "fp-ts/lib/Option"
-import {AccountResult} from "src/common/types"
-import {someNum, getId, emptyTask, fold2} from "src/common/functions"
+import {AccountResult} from "@common/types"
+import {someNum, getId, emptyTask, fold2} from "@common/functions"
 
 type AmexTransaction = {
   Date: string

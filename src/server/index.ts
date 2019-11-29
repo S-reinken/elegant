@@ -1,3 +1,4 @@
+require("module-alias/register")
 import * as express from "express"
 import {processCSVRequest} from "./import"
 import {TaskEither} from "fp-ts/lib/TaskEither"
