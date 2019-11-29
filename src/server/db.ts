@@ -13,7 +13,7 @@ export const getAll = (tableName: string) =>
   queryAll(`SELECT * FROM ${tableName}`)
 
 export const queryAll = (query: string) =>
-  tryCatch<Error, string[]>(
+  tryCatch<Error, any[]>(
     () =>
       new Promise((resolve, reject) =>
         sqlDB.all(query, (err, res) => {
