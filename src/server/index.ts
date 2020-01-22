@@ -26,6 +26,7 @@ const get = (fn: (arg: any) => TaskEither<any, any>, param: string) => (
 const settle = (task: TaskEither<any, any>) => (req: any, res: any) =>
   task().then(val => res.send(val))
 
+app.get("/aliases", settle(getAll("account_alias")))
 app.get("/transactions/:accountId", get(getTransactionsForAccount, "accountId"))
 app.get("/accounts", settle(getAll("accounts")))
 app.post("/csv", post(processCSVRequest))

@@ -2,7 +2,7 @@ import {Option, some, fold} from "fp-ts/lib/Option"
 import {TaskEither, taskEither} from "fp-ts/lib/TaskEither"
 import {AccountResult} from "./types"
 
-export const makeString = (arg: any) => String(arg)
+export const makeString = (arg: any) => JSON.stringify(arg)
 
 export const trace = <X>(arg: X) => {
   console.log(makeString(arg))
