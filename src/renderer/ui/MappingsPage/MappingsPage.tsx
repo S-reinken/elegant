@@ -6,7 +6,7 @@ import {withStyles, Select, MenuItem, Theme} from "@material-ui/core"
 import {TextField} from "@material-ui/core"
 import {Account, Alias} from "@common/types"
 import {pipe} from "fp-ts/lib/pipeable"
-import {getAccounts, getAliases} from "@renderer/common/functions"
+import {getAccounts, getAliases, setAlias} from "@renderer/common/functions"
 import {err, trace} from "@common/functions"
 import {task} from "fp-ts/lib/Task"
 import {fold} from "fp-ts/lib/TaskEither"
@@ -59,6 +59,10 @@ const MappingSelectComponent: React.FunctionComponent<MappingSelectProps> = ({
   classes,
 }) => {
   const [mapping, setMapping] = React.useState(initialMapping)
+  const changeMap = (a: Alias) => {
+    setMapping(a)
+    setAlias(a)()
+  }
   return (
     <div>
       <TextField className={classes.textField} value={mapping.alias} />
@@ -66,7 +70,7 @@ const MappingSelectComponent: React.FunctionComponent<MappingSelectProps> = ({
         className={classes.select}
         value={mapping.accountId}
         onChange={e => {
-          setMapping({
+          changeMap({
             ...mapping,
             accountId: e.target.value as number,
           })

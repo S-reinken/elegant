@@ -27,3 +27,9 @@ export const getAliases: TaskEither<Error, Alias[]> = pipe(
   request("http://localhost:8080/aliases"),
   chain(getJSON)
 )
+export const setAlias = (a: Alias) =>
+  request("http://localhost:8080/setAlias", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(a),
+  })
