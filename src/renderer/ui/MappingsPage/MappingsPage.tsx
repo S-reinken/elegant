@@ -1,17 +1,16 @@
 import * as React from "react"
 import {PageComponentProps} from "../Layout"
-import {mergeClasses, WithStyles, createStyles} from "@material-ui/styles"
+import {WithStyles} from "@material-ui/styles"
 import {styles} from "./Styles"
-import {withStyles, Select, MenuItem, Theme} from "@material-ui/core"
-import {TextField} from "@material-ui/core"
+import {withStyles, MenuItem} from "@material-ui/core"
 import {Account, Alias} from "@common/types"
 import {pipe} from "fp-ts/lib/pipeable"
-import {getAccounts, getAliases, setAlias} from "@renderer/common/functions"
-import {err, trace} from "@common/functions"
+import {getAccounts, getAliases} from "@renderer/common/functions"
+import {err} from "@common/functions"
 import {task} from "fp-ts/lib/Task"
 import {fold} from "fp-ts/lib/TaskEither"
 import {map} from "fp-ts/lib/Array"
-import {flow} from "fp-ts/lib/function"
+import {MappingSelect} from "../components"
 
 interface MappingsPageProps extends PageComponentProps {}
 
@@ -19,84 +18,6 @@ interface MappingsPageComponentProps extends WithStyles<typeof styles> {
   accounts: Account[]
   aliases: Alias[]
 }
-
-interface MappingSelectProps extends WithStyles<typeof mappingSelectStyles> {
-  initialMapping: Alias
-  options: JSX.Element[]
-}
-const mappingSelectStyles = (theme: Theme) =>
-  createStyles({
-    textField: {
-      padding: "4px",
-      marginRight: "8px",
-      backgroundColor: theme.palette.primary.main,
-      "& .MuiInput-underline:before": {
-        borderBottomColor: "white",
-      },
-      "& .MuiInput-underline:after": {
-        borderBottomColor: "white",
-      },
-      "& input": {
-        color: "white",
-        width: "400px",
-      },
-    },
-    select: {
-      padding: "4px",
-      width: "200px",
-      "& .MuiInput-underline:before": {
-        borderBottomColor: "white",
-      },
-      "& .MuiInput-underline:after": {
-        borderBottomColor: "white",
-      },
-      backgroundColor: theme.palette.primary.main,
-      color: "white",
-    },
-  })
-const MappingSelectComponent: React.FunctionComponent<MappingSelectProps> = ({
-  initialMapping,
-  options,
-  classes,
-}) => {
-  const [mapping, setMapping] = React.useState(initialMapping)
-  const changeMap = (a: Alias) => {
-    setMapping(a)
-    setAlias(a)()
-  }
-  const getAliasFromTextField = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ): Alias => ({
-    ...mapping,
-    alias: e.target.value,
-  })
-  const getAliasFromDropdown = (
-    e: React.ChangeEvent<{value: unknown}>
-  ): Alias => ({
-    ...mapping,
-    accountId: e.target.value as number,
-  })
-  const changeAlias = flow(getAliasFromTextField, changeMap)
-  const changeAccount = flow(getAliasFromDropdown, changeMap)
-  return (
-    <div>
-      <TextField
-        className={classes.textField}
-        value={mapping.alias}
-        onChange={changeAlias}
-      />
-      <Select
-        className={classes.select}
-        value={mapping.accountId}
-        onChange={changeAccount}
-      >
-        {options}
-      </Select>
-    </div>
-  )
-}
-
-const MappingSelect = withStyles(mappingSelectStyles)(MappingSelectComponent)
 
 const makeOptions = map((account: Account) => (
   <MenuItem value={account.id}>{account.name}</MenuItem>
