@@ -11,6 +11,7 @@ import {err, trace} from "@common/functions"
 import {task} from "fp-ts/lib/Task"
 import {fold} from "fp-ts/lib/TaskEither"
 import {map} from "fp-ts/lib/Array"
+import {flow} from "fp-ts/lib/function"
 
 interface MappingsPageProps extends PageComponentProps {}
 
@@ -63,18 +64,31 @@ const MappingSelectComponent: React.FunctionComponent<MappingSelectProps> = ({
     setMapping(a)
     setAlias(a)()
   }
+  const getAliasFromTextField = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ): Alias => ({
+    ...mapping,
+    alias: e.target.value,
+  })
+  const getAliasFromDropdown = (
+    e: React.ChangeEvent<{value: unknown}>
+  ): Alias => ({
+    ...mapping,
+    accountId: e.target.value as number,
+  })
+  const changeAlias = flow(getAliasFromTextField, changeMap)
+  const changeAccount = flow(getAliasFromDropdown, changeMap)
   return (
     <div>
-      <TextField className={classes.textField} value={mapping.alias} />
+      <TextField
+        className={classes.textField}
+        value={mapping.alias}
+        onChange={changeAlias}
+      />
       <Select
         className={classes.select}
         value={mapping.accountId}
-        onChange={e => {
-          changeMap({
-            ...mapping,
-            accountId: e.target.value as number,
-          })
-        }}
+        onChange={changeAccount}
       >
         {options}
       </Select>
